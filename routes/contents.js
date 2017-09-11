@@ -19,35 +19,65 @@ ToDo: Add validation for duplicate entry.
 
 router.post("/submit",function(req,res){
 	var params=req.params;
-	hack=new Hacks({"title":"Test"}).save();
-	res.send('Got a PUT request at /user');
+	/*Sanitize the params and add validations*/
+
+	hack=new Hacks(params).save();
+	res.send('saved');
 });
+
+router.delete("")
 
 /*
 PUT request for upvoting a hack
 */ 
-router.put("/upvote/:hack_id",function(req,res){
-	var $ret={
-		"status":"failure"
-	}
+router.put("/upvote/:action/:hack_id",function(req,res){
+	 var ret=new Object();
+	 ret={
+		status:"failure",
+		short_message:"Bad params passed.",
+		long_message:"The upvote failed"
+	};
 	var params=req.params;
+	console.log(params);
+	if (params.action=="add") {
+		var $process={'meta.upvotes':1}
+	}else if(params.action=="remove"){
+		var $process={'meta.upvotes':-1};
+	}else{
+		res.json(ret);
+
+	}
 	try{
+		
 		Hacks.findOneAndUpdate({id:params.hack_id,deleted_at:null,approved:true,hidden:false,deleted:false},
-			{$set:{meta.upvotes:this.meta.upvotes+1}},{new:true},function(err,doc){
-				if (!err) {
-					$ret.status="success";
-					$ret.data={};
-					$ret.data.upvotes=doc.meta.upvotes;
+			{$inc:{'meta.upvotes':1}},{new:true},function(err,doc){
+				if (err==null && doc!=null) {
+				
+					ret={
+					status:"success",
+					short_message:"success",
+					data:{
+						upvotes:doc.meta.upvotes
+					}
+				};
+								
+				}
+				else{
+					
+					ret.short_message="Nothing to update.";
+					ret.long_message="The upvote failed.";
+					console.log(ret);
+					
 				}
 			});
 
 	}
 	catch(err){
-		$ret.short_message=error.message;
-		$ret.long_message="The upvote failed."
+		ret.short_message=err.message;
+		ret.long_message="A server error happened."
 	}
 
-	res.json($ret);
+	res.json(ret);
 });
 
 module.exports = router;
