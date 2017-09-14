@@ -1,7 +1,7 @@
 var mongoose= require('mongoose');
 var Schema=mongoose.Schema;
 
-var bookmarks=new Schema({
+var upvotes=new Schema({
 	hack_id:{type:Schema.Types.ObjectId,ref:'hack'},
 	user_id:{type:Schema.Types.ObjectId,ref:'users'},
 	created_at:{type:Date,default:Date.now},
@@ -15,5 +15,5 @@ var bookmarks=new Schema({
 	},
 });
 
-var Bookmarks = mongoose.model('Bookmarks',bookmarks);
-module.exports=Bookmarks;
+var Upvotes = mongoose.model('Upvotes',upvotes);
+module.exports=Upvotes;

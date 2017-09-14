@@ -11,6 +11,38 @@ router.get('/user/:id-:name',function(req,res){
 	res.send("Route two within contents"+ req.params.id+req.params.name)
 });
 
+/*
+	PUT Request for bookmarking a hack
+*/ 
+router.put('/bookmark/:action/:hack_id',function(req,res){
+	/* Validation Block*/
+	/* */
+	try{
+		Hacks.findOneAndUpdate({id:params.hack_id,deleted_at:null,approved:true,hidden:false,deleted:false},
+			{$inc:{'meta.upvotes':1}},{new:true},function(err,doc){
+				if (err==null && doc!=null) {
+				
+					ret={
+					status:"success",
+					short_message:"success",
+					data:{
+						upvotes:doc.meta.upvotes
+					}
+				};
+								
+				}
+				else{
+					
+					ret.short_message="Nothing to update.";
+					ret.long_message="The upvote failed.";
+					console.log(ret);
+					
+				}
+			});
+	}catch(){
+
+	}
+});
 
 /*
 POST request for submitting a hack.
@@ -25,7 +57,16 @@ router.post("/submit",function(req,res){
 	res.send('saved');
 });
 
-router.delete("")
+router.post("/retrieve",function(req,res){
+	/*
+	ToDO: Add validation parameters
+	*/ 
+	Hacks.find({},function(err,doc){
+		
+	res.json(doc);
+	});
+	
+});
 
 /*
 PUT request for upvoting a hack
@@ -38,7 +79,7 @@ router.put("/upvote/:action/:hack_id",function(req,res){
 		long_message:"The upvote failed"
 	};
 	var params=req.params;
-	console.log(params);
+
 	if (params.action=="add") {
 		var $process={'meta.upvotes':1}
 	}else if(params.action=="remove"){
@@ -50,7 +91,7 @@ router.put("/upvote/:action/:hack_id",function(req,res){
 	try{
 		
 		Hacks.findOneAndUpdate({id:params.hack_id,deleted_at:null,approved:true,hidden:false,deleted:false},
-			{$inc:{'meta.upvotes':1}},{new:true},function(err,doc){
+			{$inc:$process,{new:true},function(err,doc){
 				if (err==null && doc!=null) {
 				
 					ret={
