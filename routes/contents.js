@@ -2,6 +2,7 @@ var express = require('express');
 var mongoose=require('mongoose');
 var router = express.Router();
 var Hacks=require('./../models/hacks');
+var Bookmarks=require('./../models/bookmarks');
 var ObjectId = require('mongoose').Types.ObjectId; 
 router.get('/',function(req,res,next){
 	res.send("You have reached content");
@@ -29,7 +30,7 @@ router.put('/bookmark/:action/:hack_id',function(req,res){
 	}
 
 	try{
-		/*Add record in the Bookmark table for that user*/
+		/*Add record in the Bookmark table for that user. */
 
 		Hacks.findOneAndUpdate({id:params.hack_id,deleted_at:null,approved:true,hidden:false,deleted:false},
 			{$inc:$process},{new:true},function(err,doc){
@@ -93,6 +94,9 @@ router.post("/retrieve",function(req,res){
 	/*
 	ToDO: Add validation parameters
 	*/ 
+	// var validator={
+	// 	"version":
+	// };
 	Hacks.find({},function(err,doc){
 		
 	res.json(doc);

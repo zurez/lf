@@ -8,7 +8,8 @@ var mongoose=require('mongoose');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var contents=require('./routes/contents');
-
+var image=require('./routes/image');
+var Config=require('./config');
 var app = express();
 
 // view engine setup
@@ -26,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/contents',contents);
-
+app.use('/image',image);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -47,8 +48,8 @@ app.use(function(err, req, res, next) {
 
 
 // Mongoose connect
-mongoose.connect('mongodb://localhost/lifehack');
+mongoose.connect(Config.database);
 module.exports = app;
-port = process.env.PORT || 1991;
+port = process.env.PORT || Config.port;
 
 app.listen(port);

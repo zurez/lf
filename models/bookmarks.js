@@ -7,12 +7,12 @@ var bookmarks=new Schema({
 	created_at:{type:Date,default:Date.now},
 	updated_at:{type:Date,default:Date.now},
 	deleted_at:Date,
-	deleted:{type:Boolean,default:false}
+	deleted:{type:Boolean,default:false},
 	status:{
 		type:String,
 		enum:["active","deleted","removed"],
 		default:"active"
-	},
+	}
 });
 
 var Bookmarks = mongoose.model('Bookmarks',bookmarks);

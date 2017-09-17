@@ -16,6 +16,7 @@ var hacks=new Schema({
 		gender:{type:String,default:'all'},
 		country:{type:String,default:'global'}
 	},
+	batch:Number,
 	author:String,
 	user_id:{type:Schema.Types.ObjectId,ref:'users'},
 	hidden:{type:Boolean,default:false},
@@ -37,8 +38,9 @@ var hacks=new Schema({
 });
 /*Update the updated field.*/ 
 hacks.pre('save',function(next){
-	var updated_at=new Date();
+	var updated_at=Date.now();
 	this.meta.updated_at=updated_at;
+	this.meta.edits+=1;
 	next();
 });
 
