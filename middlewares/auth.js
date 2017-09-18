@@ -2,7 +2,7 @@
     https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens
 */
 var jwt    = require('jsonwebtoken');
-var Config=require('./config');
+var Config=require('./../config');
 module.exports.auth=function(req,res,next){
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (token) {

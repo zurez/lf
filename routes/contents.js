@@ -4,14 +4,8 @@ var router = express.Router();
 var Hacks=require('./../models/hacks');
 var Bookmarks=require('./../models/bookmarks');
 var ObjectId = require('mongoose').Types.ObjectId; 
-router.get('/',function(req,res,next){
-	res.send("You have reached content");
-});
-
-
-router.get('/user/:id-:name',function(req,res){
-	res.send("Route two within contents"+ req.params.id+req.params.name)
-});
+var Auth =require('./../middlewares/auth');
+router.use("*",Auth.auth);
 
 /*
 	PUT Request for bookmarking a hack
